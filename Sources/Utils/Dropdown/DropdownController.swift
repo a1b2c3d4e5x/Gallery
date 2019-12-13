@@ -34,6 +34,11 @@ class DropdownController: UIViewController {
 
     setup()
   }
+	
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+	self.blurView = self.makeBlurView()
+	tableView.backgroundView = self.blurView
+  }
 
   // MARK: - Setup
 
@@ -86,9 +91,13 @@ class DropdownController: UIViewController {
   }
 
   func makeBlurView() -> UIVisualEffectView {
-    let view = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
-
-    return view
+    if #available(iOS 13.0, *) {
+		if case .dark = UITraitCollection.current.userInterfaceStyle {
+			return UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+		}
+	}
+	
+	return UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
   }
 }
 
